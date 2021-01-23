@@ -7,7 +7,6 @@ export const Container = styled.div`
   min-height: 660px;
   background-color: rgba(0, 0, 0, 0.75);
   border-radius: 5px;
-  box-sizing: border-box;
   width: 100%;
   margin: auto;
   max-width: 450px;
@@ -52,7 +51,7 @@ export const TextSmall = styled.p`
 `
 
 export const Link = styled(ReactRouterLink)`
-  color: white;
+  color: #fff;
   text-decoration: none;
 
   &:hover {
@@ -64,7 +63,7 @@ export const Input = styled.input`
   background: #333;
   border-radius: 4px;
   border: 0;
-  color: white;
+  color: #fff;
   height: 50px;
   line-height: 50px;
   padding: 5px 20px;

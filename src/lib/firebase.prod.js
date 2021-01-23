@@ -3,8 +3,6 @@ import 'firebase/firestore'
 import 'firebase/auth'
 // import { seedDatabase } from '../seed'
 
-//Need to seed database
-
 const config = {
   apiKey: 'AIzaSyC2a8QG8MtP_o7jZwmWu5IyunIqEnNjWTc',
   authDomain: 'netflix-clone-28893.firebaseapp.com',
