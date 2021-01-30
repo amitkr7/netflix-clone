@@ -27,6 +27,7 @@ export function BrowseContainer({ slides }) {
     setSlideRows(slides[category])
   }, [slides, category])
 
+  //Live Seacrh using fuse.js
   useEffect(() => {
     const fuse = new Fuse(slideRows, {
       keys: ['data.description', 'data.title', 'data.genre'],
