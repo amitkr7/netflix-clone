@@ -1,16 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { SelectProfileContainer } from './profiles'
-import { FooterContainer } from './footer'
-import { FirebaseContext } from '../context/firebase'
-import { Card, Loading, Header } from '../components'
+import React, { useState, useEffect, useContext } from 'react'
+import Fuse from 'fuse.js'
+import { Card, Header, Loading, Player } from '../components'
 import * as ROUTES from '../constants/routes'
 import logo from '../logo.svg'
+import { FirebaseContext } from '../context/firebase'
+import { SelectProfileContainer } from './profiles'
+import { FooterContainer } from './footer'
 
 export function BrowseContainer({ slides }) {
   const [category, setCategory] = useState('series')
-  const [searchTerm, setSearchTerm] = useState('')
   const [profile, setProfile] = useState({})
   const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
   const [slideRows, setSlideRows] = useState([])
 
   const { firebase } = useContext(FirebaseContext)
@@ -24,22 +25,36 @@ export function BrowseContainer({ slides }) {
 
   useEffect(() => {
     setSlideRows(slides[category])
-  }, [category, slides])
+  }, [slides, category])
+
+  useEffect(() => {
+    const fuse = new Fuse(slideRows, {
+      keys: ['data.description', 'data.title', 'data.genre'],
+    })
+    const results = fuse.search(searchTerm).map(({ item }) => item)
+
+    if (slideRows.length > 0 && searchTerm.length > 3 && results.length > 0) {
+      setSlideRows(results)
+    } else {
+      setSlideRows(slides[category])
+    }
+  }, [searchTerm])
 
   return profile.displayName ? (
     <>
       {loading ? <Loading src={user.photoURL} /> : <Loading.ReleaseBody />}
+
       <Header src='joker1' dontShowOnSmallViewPort>
         <Header.Frame>
           <Header.Group>
             <Header.Logo to={ROUTES.HOME} src={logo} alt='Netflix' />
             <Header.TextLink
-              active={category === 'series' ? true : false}
+              active={category === 'series' ? 'true' : 'false'}
               onClick={() => setCategory('series')}>
               Series
             </Header.TextLink>
             <Header.TextLink
-              active={category === 'films' ? true : false}
+              active={category === 'films' ? 'true' : 'false'}
               onClick={() => setCategory('films')}>
               Films
             </Header.TextLink>
@@ -97,10 +112,10 @@ export function BrowseContainer({ slides }) {
               ))}
             </Card.Entities>
             <Card.Feature category={category}>
-              {/* <Player>
+              <Player>
                 <Player.Button />
-                <Player.Video src="/videos/bunny.mp4" />
-              </Player> */}
+                <Player.Video src='/videos/bunny.mp4' />
+              </Player>
             </Card.Feature>
           </Card>
         ))}
